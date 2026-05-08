@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import type { Reporte } from '../model/reporteTypes';
 import reportesMock from '../model/reportesMock.json';
 import { filtrarReportesCercanos } from '../model/geoUtils';
+import { notificacionesMock } from '../../notificacionesPage/model/notificacionMock';
 
 export interface UserLocation {
   lat: number;
@@ -65,7 +66,7 @@ export function useDashboardController() {
   const [cargando, setCargando] = useState(true);
   const [locationStatus, setLocationStatus] = useState<'buscando' | 'ok' | 'fallback'>('buscando');
   const [accuracyMeters, setAccuracyMeters] = useState<number | null>(null);
-  const notificaciones = 3;
+  const notificaciones = notificacionesMock.filter(n => n.estado === 'PENDIENTE').length;
 
   useEffect(() => {
     if (!navigator.geolocation) {

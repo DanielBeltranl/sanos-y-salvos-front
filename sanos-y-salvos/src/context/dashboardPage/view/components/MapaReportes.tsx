@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L, { type LatLngExpression } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -80,6 +81,7 @@ const TAMANO_LABEL: Record<Reporte['tamano'], string> = {
 
 export function MapaReportes({ reportes, userLocation }: MapaReportesProps) {
   const center: LatLngExpression = [userLocation.lat, userLocation.lng];
+  const navigate = useNavigate();
 
   return (
     <MapContainer
@@ -138,6 +140,12 @@ export function MapaReportes({ reportes, userLocation }: MapaReportesProps) {
                 </p>
                 <p className="text-[#505f76] text-xs leading-snug mt-1">{reporte.descripcion}</p>
                 <p className="text-[#505f76] text-xs mt-1 italic">{reporte.direccion}</p>
+                <button
+                  onClick={() => navigate(`/reportes/${reporte.id}`)}
+                  className="mt-2 w-full py-1.5 rounded-lg bg-[#0f52ba] text-white text-xs font-semibold font-manrope hover:bg-blue-700 active:scale-95 transition-all"
+                >
+                  Ver detalle →
+                </button>
               </div>
             </Popup>
           </Marker>

@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router';
 import { useDashboardController } from '../controller/useDashboardController';
 import { MapaReportes } from './components/MapaReportes';
 import { BottomNavbar } from './components/BottomNavbar';
+import { PerfilView } from '../../perfilPage/view/perfilView';
+import { NotificacionesView } from '../../notificacionesPage/view/notificacionesView';
 
 type Tab = 'mapa' | 'notificaciones' | 'perfil';
 
@@ -44,7 +46,11 @@ export function DashboardView() {
       )}
 
       <main className="flex-1 relative overflow-hidden pb-16">
-        {cargando ? (
+        {activeTab === 'perfil' ? (
+          <PerfilView />
+        ) : activeTab === 'notificaciones' ? (
+          <NotificacionesView />
+        ) : cargando ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-slate-50">
             <div className="w-10 h-10 border-4 border-[#0f52ba] border-t-transparent rounded-full animate-spin" />
             <p className="text-sm text-[#505f76] font-inter font-medium">Buscando tu ubicación…</p>

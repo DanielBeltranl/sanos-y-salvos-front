@@ -1,30 +1,9 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { reporteCreateSchema, type ReporteCreateForm } from '../../model/reporteCreateSchema'
+import { TIPO_REPORTE_OPTIONS, TIPO_MASCOTA_OPTIONS, TAMANO_OPTIONS, SEXO_OPTIONS } from '../../model/reporteOptions'
 import { FormField, inputClassName } from '../../../commons/components/formField/FormField'
 import { SelectField } from './SelectField'
-
-const TIPO_REPORTE_OPTIONS = [
-  { value: 'PERDIDO', label: 'Mascota perdida' },
-  { value: 'AVISTADO', label: 'Mascota avistada' },
-]
-
-const TIPO_MASCOTA_OPTIONS = [
-  { value: 'PERRO', label: 'Perro' },
-  { value: 'GATO', label: 'Gato' },
-  { value: 'OTRO', label: 'Otro' },
-]
-
-const TAMANO_OPTIONS = [
-  { value: 'PEQUENO', label: 'Pequeño' },
-  { value: 'MEDIANO', label: 'Mediano' },
-  { value: 'GRANDE', label: 'Grande' },
-]
-
-const SEXO_OPTIONS = [
-  { value: 'MACHO', label: 'Macho' },
-  { value: 'HEMBRA', label: 'Hembra' },
-]
 
 interface Props {
   onSubmit: (data: ReporteCreateForm) => Promise<void>
