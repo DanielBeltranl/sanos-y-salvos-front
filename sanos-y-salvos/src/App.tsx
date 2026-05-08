@@ -1,20 +1,13 @@
-import './App.css'
-
-import {BrowserRouter} from "react-router";
-import {AppRouter} from "./router.tsx";
-import {Navbar} from "./context/commons/components/navbar/Navbar.tsx";
+import './App.css';
+import { BrowserRouter } from 'react-router';
+import { AppRouter } from './router.tsx';
 
 function App() {
-
-
   return (
-    <>
-        <BrowserRouter>
-            <Navbar/>
-            <AppRouter/>
-        </BrowserRouter>
-    </>
-  )
+    <BrowserRouter>
+      <AppRouter />
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

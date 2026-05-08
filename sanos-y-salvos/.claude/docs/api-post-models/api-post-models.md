@@ -32,21 +32,24 @@ REFUGIO
 "adress": "string"
 }
 
+que
+
+
 * Estructura de envio de reporte
 
 REPORTE POST OBJECT
 
 {
 idUsuario: number;
-tipoReporte: string;
-tipoMascota: string;
+tipoReporte: 'PERDIDO' | 'AVISTADO';
+tipoMascota: PERRO | GATO | OTRO
 nombreMascota: string;
 color: string;
-tamano: string;
+tamano: 'PEQUENO' | 'MEDIANO' | 'GRANDE';
 raza: string;
 descripcion: string;
-direccion: string;
+direccion: string;. t
 estado: string;
-sexo: string;
+sexo: 'MACHO' | 'HEMBRA';
 fotoMascota: string;
 }
