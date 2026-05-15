@@ -5,6 +5,7 @@ import { RegisterView } from './context/registerPage/view/registerView.tsx';
 import { DashboardView } from './context/dashboardPage/view/dashboardView.tsx';
 import { CrearReporteView } from './context/crearReportePage/view/crearReporteView.tsx';
 import { ReporteDetailView } from './context/reporteDetailPage/view/reporteDetailView.tsx';
+import { LoginView } from './context/loginPage/view/loginView.tsx';
 
 export const AppRouter = () => {
   return (
@@ -13,6 +14,7 @@ export const AppRouter = () => {
         <Route path="/" element={<RolSelectorView />} />
         <Route path="/register/:userType" element={<RegisterView />} />
       </Route>
+      <Route path="/login" element={<LoginView />} />
       <Route path="/dashboard" element={<DashboardView />} />
       <Route path="/crear-reporte" element={<CrearReporteView />} />
       <Route path="/reportes/:id" element={<ReporteDetailView />} />

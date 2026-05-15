@@ -8,16 +8,16 @@
 
 ## Resumen
 
-| # | Método | Ruta                        | Vista que lo consume              |
-|---|--------|-----------------------------|-----------------------------------|
-| 1 | POST   | `/auth/login`               | Login (pendiente de construir)    |
-| 2 | POST   | `/auth/register`            | RegisterView                      |
-| 3 | GET    | `/usuarios/me`              | PerfilView                        |
-| 4 | GET    | `/reportes/cercanos`        | DashboardView (mapa)              |
-| 5 | GET    | `/reportes/mis-reportes`    | PerfilView (sección Mis reportes) |
-| 6 | GET    | `/reportes/:id`             | ReporteDetailView                 |
-| 7 | POST   | `/reportes`                 | CrearReporteView                  |
-| 8 | GET    | `/notificaciones`           | NotificacionesView                |
+| # | Método | Ruta                     | Vista que lo consume              |
+|---|--------|--------------------------|-----------------------------------|
+| 1 | POST   | `/auth/login`            | Login (pendiente de construir)    |
+| 2 | POST   | `/auth/registro`         | RegisterView                      |
+| 3 | GET    | `/usuarios/me`           | PerfilView                        |
+| 4 | GET    | `/reportes/cercanos`     | DashboardView (mapa)              |
+| 5 | GET    | `/reportes/mis-reportes` | PerfilView (sección Mis reportes) |
+| 6 | GET    | `/reportes/:id`          | ReporteDetailView                 |
+| 7 | POST   | `/reportes`              | CrearReporteView                  |
+| 8 | GET    | `/notificaciones`        | NotificacionesView                |
 
 **Total: 8 endpoints**
 
@@ -55,7 +55,7 @@ El BFF no debe exponer el `refresh_token` directamente — manejarlo via cookie 
 
 ---
 
-## 2. POST `/auth/register`
+## 2. POST `/auth/registro`
 
 **Vista:** `RegisterView` — formularios de persona, clínica y refugio.
 
