@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
+import { Toaster } from 'react-hot-toast';
 import { useDashboardController } from '../controller/useDashboardController';
 import { MapaReportes } from './components/MapaReportes';
 import { BottomNavbar } from './components/BottomNavbar';
@@ -9,16 +10,24 @@ import { NotificacionesView } from '../../notificacionesPage/view/notificaciones
 type Tab = 'mapa' | 'notificaciones' | 'perfil';
 
 export function DashboardView() {
-  const { userLocation, reportesCercanos, cargando, locationStatus, notificaciones } =
-    useDashboardController();
+  const {
+    userLocation,
+    reportesCercanos,
+    cargando,
+    locationStatus,
+    notificacionesList,
+    cargandoNotifs,
+    notificacionesCount,
+  } = useDashboardController();
   const [activeTab, setActiveTab] = useState<Tab>('mapa');
   const navigate = useNavigate();
 
   const perdidos = reportesCercanos.filter(r => r.tipoReporte === 'PERDIDO').length;
-  const avistados = reportesCercanos.filter(r => r.tipoReporte === 'AVISTADO').length;
+  const avistados = reportesCercanos.filter(r => r.tipoReporte === 'VISTO').length;
 
   return (
     <div className="flex flex-col h-dvh bg-slate-50">
+      <Toaster position="top-center" toastOptions={{ style: { fontFamily: 'Inter, sans-serif', fontSize: '14px' } }} />
 
       <header className="sticky top-0 z-50 h-16 flex items-center justify-between px-5 bg-white border-b border-slate-100 shadow-sm shadow-blue-900/5 font-manrope shrink-0">
         <span className="text-xl font-extrabold tracking-tight text-[#0f52ba]">
@@ -49,7 +58,7 @@ export function DashboardView() {
         {activeTab === 'perfil' ? (
           <PerfilView />
         ) : activeTab === 'notificaciones' ? (
-          <NotificacionesView />
+          <NotificacionesView notificaciones={notificacionesList} cargando={cargandoNotifs} />
         ) : cargando ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-slate-50">
             <div className="w-10 h-10 border-4 border-[#0f52ba] border-t-transparent rounded-full animate-spin" />
@@ -77,7 +86,7 @@ export function DashboardView() {
       </main>
 
       <BottomNavbar
-        notificaciones={notificaciones}
+        notificaciones={notificacionesCount}
         activeTab={activeTab}
         onTabChange={setActiveTab}
       />

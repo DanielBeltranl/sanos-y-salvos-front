@@ -31,7 +31,7 @@ export const reportesDelUsuarioMock: ReporteResumen[] = [
     id: 102,
     nombreMascota: 'Max',
     tipoMascota: 'Gato',
-    tipoReporte: 'AVISTADO',
+    tipoReporte: 'VISTO',
     estado: 'RESUELTO',
     direccion: 'Calle 5 Norte 320, Maipú',
   },

@@ -1,6 +1,6 @@
 export const TIPO_REPORTE_OPTIONS = [
   { value: 'PERDIDO', label: 'Mascota perdida' },
-  { value: 'AVISTADO', label: 'Mascota avistada' },
+  { value: 'VISTO', label: 'Mascota avistada' },
 ] as const
 
 export const TIPO_MASCOTA_OPTIONS = [

@@ -12,7 +12,7 @@ const TAMANO_LABEL: Record<Reporte['tamano'], string> = {
 
 const TIPO_CONFIG = {
   PERDIDO: { label: 'Mascota perdida', class: 'bg-red-500 text-white' },
-  AVISTADO: { label: 'Mascota avistada', class: 'bg-[#0f52ba] text-white' },
+  VISTO: { label: 'Mascota avistada', class: 'bg-[#0f52ba] text-white' },
 }
 
 const ESTADO_CONFIG = {
@@ -60,8 +60,8 @@ export function ReporteDetailView() {
   }
 
   const coords = parseCoordenadas(reporte.coordenadas)
-  const tipo = TIPO_CONFIG[reporte.tipoReporte]
-  const estado = ESTADO_CONFIG[reporte.estado]
+  const tipo = TIPO_CONFIG[reporte.tipoReporte] ?? { label: reporte.tipoReporte, class: 'bg-slate-200 text-slate-700' }
+  const estado = ESTADO_CONFIG[reporte.estado] ?? { label: reporte.estado, class: 'bg-slate-100 text-slate-500' }
 
   return (
     <div className="min-h-dvh bg-slate-50 flex flex-col">

@@ -2,6 +2,7 @@ import { useRegisterController } from '../controller/useRegisterController'
 import { PersonaRegisterForm } from './components/PersonaRegisterForm'
 import { ClinicaRegisterForm } from './components/ClinicaRegisterForm'
 import { RefugioRegisterForm } from './components/RefugioRegisterForm'
+import { SuccessOverlay } from './components/SuccessOverlay'
 import type { PersonaForm, ClinicaForm, RefugioForm } from '../model/registerSchemas'
 
 const ROLE_CONFIG = {
@@ -23,11 +24,12 @@ const ROLE_CONFIG = {
 }
 
 export const RegisterView = () => {
-  const { userType, onSubmit, goBack } = useRegisterController()
+  const { userType, onSubmit, goBack, success, countdown } = useRegisterController()
   const config = ROLE_CONFIG[userType]
 
   return (
     <div className="min-h-[calc(100vh-4rem)] bg-[#f8fafc] flex flex-col items-center justify-start py-8 px-4 sm:px-6">
+      <SuccessOverlay visible={success} countdown={countdown} />
       <div className="w-full max-w-lg">
 
         <button

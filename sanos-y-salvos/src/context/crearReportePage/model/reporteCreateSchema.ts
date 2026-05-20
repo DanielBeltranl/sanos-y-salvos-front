@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const reporteCreateSchema = z.object({
-  tipoReporte: z.enum(['PERDIDO', 'AVISTADO'], { error: 'Selecciona el tipo de reporte' }),
+  tipoReporte: z.enum(['PERDIDO', 'VISTO'], { error: 'Selecciona el tipo de reporte' }),
   tipoMascota: z.enum(['PERRO', 'GATO', 'OTRO'], { error: 'Selecciona el tipo de mascota' }),
   nombreMascota: z.string().min(1, 'El nombre es requerido'),
   raza: z.string().min(1, 'La raza es requerida'),

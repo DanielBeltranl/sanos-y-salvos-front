@@ -21,6 +21,13 @@ export interface NotificacionUI {
   mensajeError: string | null
 }
 
+// Shape exacto del WebSocket y del REST de notificaciones
+export interface NotificacionMatchDTO {
+  nombre_mascota: string
+  id_reporte_encontrado: number
+  fecha_coincidencia: string
+}
+
 export function mapApiNotificacion(api: ApiNotificacion): NotificacionUI {
   return {
     id: api.id_notificacion,

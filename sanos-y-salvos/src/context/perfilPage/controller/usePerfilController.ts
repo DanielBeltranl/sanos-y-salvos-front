@@ -1,21 +1,35 @@
 import { useState, useEffect } from 'react'
-import type { PerfilUsuario, ReporteResumen } from '../model/perfilTypes'
-import { perfilMock, reportesDelUsuarioMock } from '../model/perfilMock'
+import { useNavigate } from 'react-router'
+import type { PerfilUsuario } from '../model/perfilTypes'
+import { mapApiUsuarioToPerfil } from '../model/perfilTypes'
+import { fetchUsuarioById } from '../model/perfilApi'
+import { tokenManager } from '../../../services/tokenManager'
 
 export function usePerfilController() {
+  const navigate = useNavigate()
   const [perfil, setPerfil] = useState<PerfilUsuario | null>(null)
-  const [reportes, setReportes] = useState<ReporteResumen[]>([])
   const [cargando, setCargando] = useState(true)
 
   useEffect(() => {
-    // TODO: reemplazar con llamadas al API
-    // 1. Obtener el id y email desde el token de Supabase (localStorage o contexto de auth)
-    // 2. GET /usuarios/:id  → ApiUsuario → mapApiUsuarioToPerfil(data, email)
-    // 3. GET /reportes?idUsuario=:id → ReporteResumen[]
-    setPerfil(perfilMock)
-    setReportes(reportesDelUsuarioMock)
-    setCargando(false)
-  }, [])
+    const payload = tokenManager.decode() as { sub?: string; email?: string } | null
+    const id = payload?.sub
+    const email = payload?.email ?? ''
 
-  return { perfil, reportes, cargando }
+    if (!id) {
+      navigate('/')
+      return
+    }
+
+    fetchUsuarioById(id)
+      .then((apiUsuario) => setPerfil(mapApiUsuarioToPerfil(apiUsuario, email)))
+      .catch(() => {})
+      .finally(() => setCargando(false))
+  }, [navigate])
+
+  const logout = () => {
+    tokenManager.clear()
+    navigate('/')
+  }
+
+  return { perfil, cargando, logout }
 }

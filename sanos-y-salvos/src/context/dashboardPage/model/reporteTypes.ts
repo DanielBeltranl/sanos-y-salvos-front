@@ -1,6 +1,6 @@
 export interface Reporte {
-  id: number;
-  idUsuario: number;
+  id: string;
+  idUsuario: string;
   nombreMascota: string;
   tipoMascota: string;
   raza: string;
@@ -12,5 +12,5 @@ export interface Reporte {
   direccion: string;
   coordenadas: string;
   estado: 'ACTIVO' | 'INACTIVO' | 'RESUELTO';
-  tipoReporte: 'PERDIDO' | 'AVISTADO';
+  tipoReporte: 'PERDIDO' | 'VISTO';
 }

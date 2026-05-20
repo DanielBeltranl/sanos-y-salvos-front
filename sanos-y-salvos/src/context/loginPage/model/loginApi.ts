@@ -7,11 +7,14 @@ export interface LoginPayload {
 }
 
 export interface LoginResponse {
-  access_token: string
+  status: number
+  accessToken: string
+  expiresIn: number
+  refreshToken: string
   user: AuthUser
 }
 
 export async function loginUser(payload: LoginPayload): Promise<LoginResponse> {
-  const { data } = await httpClient.post<LoginResponse>('/auth/login', payload)
+  const { data } = await httpClient.post<LoginResponse>('/api/login', payload)
   return data
 }

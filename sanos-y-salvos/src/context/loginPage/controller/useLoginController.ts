@@ -19,7 +19,7 @@ export const useLoginController = () => {
     setServerError(null)
     try {
       const res = await loginUser(data)
-      tokenManager.set(res.access_token)
+      tokenManager.set(res.accessToken)
       navigate('/dashboard')
     } catch {
       setServerError('Correo o contraseña incorrectos. Intenta de nuevo.')
@@ -31,6 +31,6 @@ export const useLoginController = () => {
     onSubmit,
     serverError,
     isSubmitting: form.formState.isSubmitting,
-    goToRegister: () => navigate('/'),
+    goToRegister: () => navigate('/rol-selector'),
   }
 }

@@ -1,8 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import toast from 'react-hot-toast';
 import type { Reporte } from '../model/reporteTypes';
-import reportesMock from '../model/reportesMock.json';
-import { filtrarReportesCercanos } from '../model/geoUtils';
-import { notificacionesMock } from '../../notificacionesPage/model/notificacionMock';
+import { fetchReportesCercanos } from '../model/reportesApi';
+import { tokenManager } from '../../../services/tokenManager';
+import type { NotificacionMatchDTO } from '../../notificacionesPage/model/notificacionTypes';
+import { fetchNotificacionesPendientes } from '../../notificacionesPage/model/notificacionApi';
+import { useNotificacionesWs } from '../../notificacionesPage/controller/useNotificacionesWs';
 
 export interface UserLocation {
   lat: number;
@@ -11,13 +14,9 @@ export interface UserLocation {
 }
 
 const DEFAULT_LOCATION: UserLocation = { lat: -33.4489, lng: -70.6693 };
-const RADIO_KM = 1;
 
-// Máximo de lecturas a recolectar antes de decidir
 const MAX_READINGS = 6;
-// Tiempo máximo de espera en ms
 const MAX_WAIT_MS = 14000;
-// Si obtenemos una lectura con accuracy <= a este valor, la aceptamos de inmediato
 const ACCURACY_THRESHOLD_M = 80;
 
 function getBestPosition(): Promise<GeolocationPosition> {
@@ -33,7 +32,6 @@ function getBestPosition(): Promise<GeolocationPosition> {
         reject(new Error('Sin lecturas'));
         return;
       }
-      // Elige la lectura con menor radio de incertidumbre
       resolve(readings.reduce((best, curr) =>
         curr.coords.accuracy < best.coords.accuracy ? curr : best
       ));
@@ -42,11 +40,7 @@ function getBestPosition(): Promise<GeolocationPosition> {
     watchId = navigator.geolocation.watchPosition(
       pos => {
         readings.push(pos);
-        // Si ya es suficientemente precisa, no esperamos más
-        if (pos.coords.accuracy <= ACCURACY_THRESHOLD_M) {
-          finish();
-          return;
-        }
+        if (pos.coords.accuracy <= ACCURACY_THRESHOLD_M) { finish(); return; }
         if (readings.length >= MAX_READINGS) finish();
       },
       err => {
@@ -66,7 +60,29 @@ export function useDashboardController() {
   const [cargando, setCargando] = useState(true);
   const [locationStatus, setLocationStatus] = useState<'buscando' | 'ok' | 'fallback'>('buscando');
   const [accuracyMeters, setAccuracyMeters] = useState<number | null>(null);
-  const notificaciones = notificacionesMock.filter(n => n.estado === 'PENDIENTE').length;
+
+  const [notificacionesList, setNotificacionesList] = useState<NotificacionMatchDTO[]>([]);
+  const [cargandoNotifs, setCargandoNotifs] = useState(true);
+
+  const userId = tokenManager.getUserId();
+
+  useEffect(() => {
+    if (!userId) { setCargandoNotifs(false); return; }
+    fetchNotificacionesPendientes(userId).then(data => {
+      setNotificacionesList(data);
+      setCargandoNotifs(false);
+    });
+  }, [userId]);
+
+  const onMensaje = useCallback((data: NotificacionMatchDTO) => {
+    setNotificacionesList(prev => [data, ...prev]);
+    toast.success(
+      '🐾 ¡Encontramos un reporte que te podría servir! Revisa tus alertas.',
+      { duration: 6000 }
+    );
+  }, []);
+
+  useNotificacionesWs(userId, onMensaje);
 
   useEffect(() => {
     if (!navigator.geolocation) {
@@ -92,12 +108,37 @@ export function useDashboardController() {
       });
   }, []);
 
-  function aplicarUbicacion(loc: UserLocation) {
+  async function aplicarUbicacion(loc: UserLocation) {
     setUserLocation(loc);
-    const cercanos = filtrarReportesCercanos(reportesMock as Reporte[], loc.lat, loc.lng, RADIO_KM);
-    setReportesCercanos(cercanos);
+    try {
+      const reportes = await fetchReportesCercanos(loc.lat, loc.lng);
+      setReportesCercanos(reportes);
+    } catch {
+      setReportesCercanos([]);
+    }
     setCargando(false);
   }
 
-  return { userLocation, reportesCercanos, cargando, locationStatus, accuracyMeters, notificaciones };
+  useEffect(() => {
+    if (!userLocation) return;
+    const { lat, lng } = userLocation;
+    const id = setInterval(async () => {
+      try {
+        const reportes = await fetchReportesCercanos(lat, lng);
+        setReportesCercanos(reportes);
+      } catch { /* falla silenciosamente */ }
+    }, 60_000);
+    return () => clearInterval(id);
+  }, [userLocation]);
+
+  return {
+    userLocation,
+    reportesCercanos,
+    cargando,
+    locationStatus,
+    accuracyMeters,
+    notificacionesList,
+    cargandoNotifs,
+    notificacionesCount: notificacionesList.length,
+  };
 }

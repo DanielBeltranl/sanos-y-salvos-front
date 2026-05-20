@@ -1,18 +1,25 @@
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { reporteCreateSchema, type ReporteCreateForm } from '../../model/reporteCreateSchema'
 import { TIPO_REPORTE_OPTIONS, TIPO_MASCOTA_OPTIONS, TAMANO_OPTIONS, SEXO_OPTIONS } from '../../model/reporteOptions'
 import { FormField, inputClassName } from '../../../commons/components/formField/FormField'
 import { SelectField } from './SelectField'
+import { PhotoDropZone } from './PhotoDropZone'
+import { MapaPinSelector } from './MapaPinSelector'
 
 interface Props {
-  onSubmit: (data: ReporteCreateForm) => Promise<void>
+  onSubmit: (data: ReporteCreateForm, coordenadas: string | null) => Promise<void>
 }
 
 export const CrearReporteForm = ({ onSubmit }: Props) => {
+  const [photoFile, setPhotoFile] = useState<File | null>(null)
+  const [coordenadas, setCoordenadas] = useState<{ lat: number; lng: number } | null>(null)
+
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<ReporteCreateForm>({
     resolver: zodResolver(reporteCreateSchema),
@@ -20,7 +27,14 @@ export const CrearReporteForm = ({ onSubmit }: Props) => {
   })
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5" noValidate>
+    <form
+      onSubmit={handleSubmit((data) => {
+        const coords = coordenadas ? `${coordenadas.lat}, ${coordenadas.lng}` : null
+        return onSubmit(data, coords)
+      })}
+      className="flex flex-col gap-5"
+      noValidate
+    >
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <SelectField
@@ -84,10 +98,12 @@ export const CrearReporteForm = ({ onSubmit }: Props) => {
       <FormField label="Dirección donde fue visto/perdido" error={errors.direccion?.message}>
         <input
           {...register('direccion')}
-          placeholder="Ej: Av. Los Libertadores 7200, Cerrillos"
+          placeholder="Ej: Av. Los Libertadores 7200, Cerrillos, Santiago"
           className={inputClassName}
         />
       </FormField>
+
+      <MapaPinSelector onConfirm={(lat, lng) => setCoordenadas({ lat, lng })} />
 
       <FormField label="Descripción" error={errors.descripcion?.message}>
         <textarea
@@ -98,14 +114,10 @@ export const CrearReporteForm = ({ onSubmit }: Props) => {
         />
       </FormField>
 
-      <FormField label="URL de foto (opcional)" error={errors.fotoMascota?.message}>
-        <input
-          {...register('fotoMascota')}
-          type="url"
-          placeholder="https://..."
-          className={inputClassName}
-        />
-      </FormField>
+      <PhotoDropZone
+        onFileChange={setPhotoFile}
+        onUploadComplete={(url) => setValue('fotoMascota', url)}
+      />
 
       <button
         type="submit"

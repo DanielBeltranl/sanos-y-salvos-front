@@ -1,9 +1,12 @@
-import { useNotificacionesController } from '../controller/useNotificacionesController'
+import type { NotificacionMatchDTO } from '../model/notificacionTypes'
 import { NotificacionCard } from './components/NotificacionCard'
 
-export function NotificacionesView() {
-  const { notificaciones, pendientes, cargando } = useNotificacionesController()
+interface Props {
+  notificaciones: NotificacionMatchDTO[]
+  cargando: boolean
+}
 
+export function NotificacionesView({ notificaciones, cargando }: Props) {
   if (cargando) {
     return (
       <div className="h-full flex items-center justify-center">
@@ -18,9 +21,9 @@ export function NotificacionesView() {
 
         <div className="flex items-center justify-between px-1">
           <h2 className="font-manrope text-base font-bold text-[#191c1e]">Alertas</h2>
-          {pendientes > 0 && (
+          {notificaciones.length > 0 && (
             <span className="text-xs font-semibold font-manrope bg-[#0f52ba] text-white px-2.5 py-1 rounded-full">
-              {pendientes} nueva{pendientes > 1 ? 's' : ''}
+              {notificaciones.length} nueva{notificaciones.length > 1 ? 's' : ''}
             </span>
           )}
         </div>
@@ -36,18 +39,9 @@ export function NotificacionesView() {
             </p>
           </div>
         ) : (
-          <>
-            {/* Pendientes primero */}
-            {notificaciones
-              .slice()
-              .sort((a, b) => {
-                const orden = { PENDIENTE: 0, ERROR: 1, LEIDA: 2 }
-                return orden[a.estado] - orden[b.estado]
-              })
-              .map(n => (
-                <NotificacionCard key={n.id} notificacion={n} />
-              ))}
-          </>
+          notificaciones.map((n, i) => (
+            <NotificacionCard key={`${n.id_reporte_encontrado}-${i}`} notificacion={n} />
+          ))
         )}
 
       </div>

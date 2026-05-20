@@ -1,6 +1,8 @@
+import { httpClient } from '../../../services/httpClient'
+
 export interface ReporteCreatePayload {
-  idUsuario: number;
-  tipoReporte: 'PERDIDO' | 'AVISTADO';
+  idUsuario: string;
+  tipoReporte: 'PERDIDO' | 'VISTO';
   tipoMascota: 'PERRO' | 'GATO' | 'OTRO';
   nombreMascota: string;
   color: string;
@@ -8,13 +10,11 @@ export interface ReporteCreatePayload {
   raza: string;
   descripcion: string;
   direccion: string;
-  estado: string;
   sexo: 'MACHO' | 'HEMBRA';
   fotoMascota: string;
+  coordenadas?: string;
 }
 
 export async function crearReporte(payload: ReporteCreatePayload): Promise<void> {
-  // TODO: reemplazar con llamada real a la API
-  // await axios.post('/api/reportes', payload)
-  console.log('POST /api/reportes', payload)
+  await httpClient.post('/reportes/crear', payload)
 }

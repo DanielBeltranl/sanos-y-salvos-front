@@ -1,4 +1,3 @@
-// Respuesta exacta del endpoint GET /usuarios/:id
 export interface ApiUsuario {
   id: string
   name: string | null
@@ -10,6 +9,13 @@ export interface ApiUsuario {
   phone: number
   role: 'PERSONA' | 'INSTITUCION'
   userType: 'persona' | 'clinica' | 'refugio'
+}
+
+export interface ApiUsuarioResponse {
+  status: number
+  message: string
+  error: string | null
+  user: ApiUsuario
 }
 
 // Modelo normalizado para la vista
@@ -27,7 +33,7 @@ export interface ReporteResumen {
   id: number
   nombreMascota: string
   tipoMascota: string
-  tipoReporte: 'PERDIDO' | 'AVISTADO'
+  tipoReporte: 'PERDIDO' | 'VISTO'
   estado: 'ACTIVO' | 'INACTIVO' | 'RESUELTO'
   fotoMascota?: string
   direccion: string

@@ -1,5 +1,8 @@
 * Informacion de los perfiles que se pueden enviar por el registro
 
+## DEBES PARCEAR LAS CORDENADAS PREOPIAS A NUMERO PARA LLAMAR A LA API, SOY OLVIDADIZO, SI MAÑANA NO FUNCIONA, RECUERDAME ESTO
+
+
 POST OBJECTS
 
 ● PERSONA                                                                                                                                           
@@ -49,6 +52,7 @@ tamano: 'PEQUENO' | 'MEDIANO' | 'GRANDE';
 raza: string;
 descripcion: string;
 direccion: string;. t
+coordenadas: string // formato "-lat, -long"
 estado: string;
 sexo: 'MACHO' | 'HEMBRA';
 fotoMascota: string;

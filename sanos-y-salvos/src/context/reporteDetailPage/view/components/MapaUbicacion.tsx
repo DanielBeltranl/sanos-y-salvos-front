@@ -34,7 +34,7 @@ const avistadoPin = makePin('#0f52ba')
 interface Props {
   lat: number
   lng: number
-  tipoReporte: 'PERDIDO' | 'AVISTADO'
+  tipoReporte: 'PERDIDO' | 'VISTO'
   nombreMascota: string
 }
 

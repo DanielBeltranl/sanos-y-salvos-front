@@ -3,7 +3,7 @@ import type { ReporteResumen } from '../../model/perfilTypes'
 
 const TIPO_STYLES = {
   PERDIDO: 'bg-red-50 text-red-600',
-  AVISTADO: 'bg-blue-50 text-[#0f52ba]',
+  VISTO: 'bg-blue-50 text-[#0f52ba]',
 }
 
 const ESTADO_STYLES = {
@@ -12,7 +12,7 @@ const ESTADO_STYLES = {
   RESUELTO: 'bg-slate-100 text-slate-500',
 }
 
-const TIPO_LABELS = { PERDIDO: 'Perdido', AVISTADO: 'Avistado' }
+const TIPO_LABELS = { PERDIDO: 'Perdido', VISTO: 'Avistado' }
 const ESTADO_LABELS = { ACTIVO: 'Activo', INACTIVO: 'Inactivo', RESUELTO: 'Resuelto' }
 
 interface Props {

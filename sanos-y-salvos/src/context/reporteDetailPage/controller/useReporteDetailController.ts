@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router'
 import type { Reporte } from '../../dashboardPage/model/reporteTypes'
-import reportesMock from '../../dashboardPage/model/reportesMock.json'
+import { fetchReporteById } from '../model/reporteDetailApi'
 
 export function useReporteDetailController() {
   const { id } = useParams<{ id: string }>()
@@ -10,14 +10,11 @@ export function useReporteDetailController() {
   const [noEncontrado, setNoEncontrado] = useState(false)
 
   useEffect(() => {
-    // TODO: GET /reportes/:id
-    const found = (reportesMock as Reporte[]).find(r => r.id === Number(id))
-    if (found) {
-      setReporte(found)
-    } else {
-      setNoEncontrado(true)
-    }
-    setCargando(false)
+    if (!id) return
+    fetchReporteById(id)
+      .then(setReporte)
+      .catch(() => setNoEncontrado(true))
+      .finally(() => setCargando(false))
   }, [id])
 
   return { reporte, cargando, noEncontrado }

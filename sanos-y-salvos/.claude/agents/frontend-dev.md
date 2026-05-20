@@ -1,3 +1,9 @@
+---
+name: frontend-dev
+description: Agente frontend senior — componentes React, diseño visual, Tailwind, mobile-first
+color: cyan
+---
+
 # frontend-dev
 
 ## Description

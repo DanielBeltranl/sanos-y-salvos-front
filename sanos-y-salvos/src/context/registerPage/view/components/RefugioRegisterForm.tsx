@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { refugioSchema, type RefugioForm } from '../../model/registerSchemas'
 import { FormField, inputClassName } from '../../../commons/components/formField/FormField'
+import { PasswordInput } from './PasswordInput'
 
 interface Props {
   onSubmit: (data: RefugioForm) => void
@@ -28,7 +29,7 @@ export const RefugioRegisterForm = ({ onSubmit }: Props) => {
       </FormField>
 
       <FormField label="Contraseña" error={errors.password?.message}>
-        <input {...register('password')} type="password" placeholder="Mínimo 8 caracteres" className={inputClassName} />
+        <PasswordInput {...register('password')} placeholder="Mínimo 8 caracteres" />
       </FormField>
 
       <FormField label="Teléfono" error={errors.phone?.message}>

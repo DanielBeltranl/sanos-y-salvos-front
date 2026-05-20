@@ -1,10 +1,10 @@
 const TOKEN_KEY = 'access_token'
 
 export type AuthUser = {
-  id: string
   email: string
-  role: 'PERSONA' | 'INSTITUCION'
-  userType: 'persona' | 'clinica' | 'refugio'
+  role: string
+  phone: string
+  userType: string
 }
 
 function decodeJwt<T = Record<string, unknown>>(token: string): T | null {
@@ -25,15 +25,15 @@ function isTokenExpired(token: string): boolean {
 
 export const tokenManager = {
   set(token: string): void {
-    sessionStorage.setItem(TOKEN_KEY, token)
+    localStorage.setItem(TOKEN_KEY, token)
   },
 
   get(): string | null {
-    return sessionStorage.getItem(TOKEN_KEY)
+    return localStorage.getItem(TOKEN_KEY)
   },
 
   clear(): void {
-    sessionStorage.removeItem(TOKEN_KEY)
+    localStorage.removeItem(TOKEN_KEY)
   },
 
   isValid(): boolean {
@@ -46,5 +46,11 @@ export const tokenManager = {
     const token = this.get()
     if (!token) return null
     return decodeJwt(token)
+  },
+
+  getUserId(): string | null {
+    const payload = this.decode()
+    if (!payload?.sub) return null
+    return payload.sub as string
   },
 }
